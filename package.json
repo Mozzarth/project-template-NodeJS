@@ -1,0 +1,33 @@
+{
+  "name": "ProjectTemplate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/src/index.js",
+    "dev": "nodemon -L",
+    "build": "npm run build:clean && npm run build:tsc && npm run build:cp",
+    "build:clean": "rm -r dist; exit 0",
+    "build:tsc": "tsc -p tsconfig.prod.json",
+    "build:cp": "copy 'src/**/*.{json,yaml,html,png}' dist/src"
+  },
+  "keywords": [],
+  "author": "Mozzarth",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "copy": "^0.3.2",
+    "cross-env": "^7.0.3",
+    "husky": "^6.0.0",
+    "nodemon": "^2.0.7",
+    "prettier": "^2.3.0",
+    "pretty-quick": "^3.1.0",
+    "ts-node-dev": "^1.1.6",
+    "typescript": "^4.2.4"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  }
+}
