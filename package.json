@@ -1,7 +1,8 @@
 {
   "name": "ProjectTemplate",
   "version": "1.0.0",
-  "description": "",
+  "description": "Your description proyect",
+  "author": "https://www.linkedin.com/in/mozzarth/",
   "main": "index.js",
   "scripts": {
     "start": "node dist/src/index.js",
@@ -12,7 +13,6 @@
     "build:cp": "copy 'src/**/*.{json,yaml,html,png}' dist/src"
   },
   "keywords": [],
-  "author": "Mozzarth",
   "license": "ISC",
   "dependencies": {},
   "devDependencies": {
