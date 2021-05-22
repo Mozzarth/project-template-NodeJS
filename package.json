@@ -5,8 +5,12 @@
   "author": "https://www.linkedin.com/in/mozzarth/",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/src/index.js",
     "dev": "nodemon -L",
+    "start": "npm run build && node dist/index.js",
+    "start:pm2": "npm run build && pm2 start ecosystem.config.js",
+    "start:pm2:prb": "npm run build && pm2 start ecosystem.config.js --only yourNameAppPrb",
+    "start:pm2:prd": "npm run build && pm2 start ecosystem.config.js --only yourNameAppPrd",
+    
     "build": "npm run build:clean && npm run build:tsc && npm run build:cp",
     "build:clean": "rm -r dist; exit 0",
     "build:tsc": "tsc -p tsconfig.prod.json",
@@ -14,8 +18,16 @@
   },
   "keywords": [],
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  },
   "devDependencies": {
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.11",
+    "@types/morgan": "^1.9.2",
+    "@types/node": "^15.6.0",
     "copy": "^0.3.2",
     "cross-env": "^7.0.3",
     "husky": "^6.0.0",
