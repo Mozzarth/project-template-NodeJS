@@ -8,8 +8,8 @@ export interface IUserFind {
     password : string,
     created: Date,
     userCreate: string,
-    userUpdate: string | undefined,
-    updateAt: Date | undefined
+    userUpdate: string | null,
+    updateAt: Date | null
 }
 
 
@@ -18,5 +18,4 @@ export interface IUserFindRepository {
     root(): Promise<IUserFind | undefined>
     byId(id: Uuid): Promise<IUserFind | undefined>
     byEmail(email: EmailAddres): Promise<IUserFind | undefined>
-    byEmailAndPassword(email: EmailAddres,password : string): Promise<IUserFind | undefined>
 }

@@ -24,7 +24,7 @@ export class UserAuthentication {
             const emailAddres = new EmailAddres(email)
             const user = await this.repository.byEmail(emailAddres)
             if (user == undefined) throw new UserNotExistsError()
-
+            console.log({user})
             const validCredential = await this.encrypt.compare(password, user.password)
             if (!validCredential) throw new UserCredentialInvalid()
             const key = await this.decodedKeyAPP.getKey({ id: user.idUser })

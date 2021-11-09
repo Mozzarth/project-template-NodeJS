@@ -17,13 +17,13 @@ export class UserFindMysql implements IUserFindRepository {
         try {
             const data = await connection.query(`
                         SELECT
-                            BIN_TO_UUID(idUSer) as idUSer,
+                            BIN_TO_UUID(idUSer) as idUser,
                             email,
                             password,
                             profile,
                             created,
-                            if(isnull(userCreate)=1,"",BIN_TO_UUID(userCreate)) as userCreate,
-                            if(isnull(userUpdate)=1,"",BIN_TO_UUID(userUpdate)) as userUpdate,
+                            if(isnull(userCreate)=1,null,BIN_TO_UUID(userCreate)) as userCreate,
+                            if(isnull(userUpdate)=1,null,BIN_TO_UUID(userUpdate)) as userUpdate,
                             updateAt
                         FROM users;`, [])
             // console.log(data)
@@ -40,15 +40,15 @@ export class UserFindMysql implements IUserFindRepository {
         try {
             const data = await connection.query<RowDataPacket[][]>(`
                         SELECT
-                            BIN_TO_UUID(idUSer) as idUSer,
+                            BIN_TO_UUID(idUSer) as idUser,
                             email,
                             password,
                             profile,
                             created,
-                            if(isnull(userCreate)=1,"",BIN_TO_UUID(userCreate)) as userCreate,
-                            if(isnull(userUpdate)=1,"",BIN_TO_UUID(userUpdate)) as userUpdate,
+                            if(isnull(userCreate)=1,null,BIN_TO_UUID(userCreate)) as userCreate,
+                            if(isnull(userUpdate)=1,null,BIN_TO_UUID(userUpdate)) as userUpdate,
                             updateAt
-                        FROM users where profile = ? ;`, [Profiles.ROOT])
+                        FROM users where profile = ? and active = 1;`, [Profiles.ROOT])
             const result: any = data[0][0]
             return (result as IUserFind | undefined)
             return undefined
@@ -61,21 +61,19 @@ export class UserFindMysql implements IUserFindRepository {
     async byId(id: Uuid): Promise<IUserFind | undefined> {
         const connection = await this.provider.getConnection();
         try {
-            const data = await connection.query(`
+            const data = await connection.query<RowDataPacket[][]>(`
                         SELECT
-                            BIN_TO_UUID(idUSer) as idUSer,
+                            BIN_TO_UUID(idUSer) as idUser,
                             email,
                             password,
                             profile,
                             created,
-                            if(isnull(userCreate)=1,"",BIN_TO_UUID(userCreate)) as userCreate,
-                            if(isnull(userUpdate)=1,"",BIN_TO_UUID(userUpdate)) as userUpdate,
+                            if(isnull(userCreate)=1,null,BIN_TO_UUID(userCreate)) as userCreate,
+                            if(isnull(userUpdate)=1,null,BIN_TO_UUID(userUpdate)) as userUpdate,
                             updateAt
-                        FROM users where BIN_TO_UUID(idUSer) = ? ;`, [id.toString()])
-            // console.log(data)
-            if (data[0] == undefined) return undefined
-            const result = data[0]
-            return undefined
+                        FROM users where idUSer = UUID_TO_BIN(?) and active = 1;`, [id.toString()])
+            const result: any = data[0][0]
+            return (result as IUserFind | undefined)
         } catch (error) {
             throw error
         } finally {
@@ -87,39 +85,15 @@ export class UserFindMysql implements IUserFindRepository {
         const connection = await this.provider.getConnection();
         try {
             const data = await connection.query<RowDataPacket[][]>(`SELECT
-                            BIN_TO_UUID(idUSer) as idUSer,
+                            BIN_TO_UUID(idUSer) as idUser,
                             email,
                             profile,
                             password,
                             created,
-                            if(isnull(userCreate)=1,"",BIN_TO_UUID(userCreate)) as userCreate,
-                            if(isnull(userUpdate)=1,"",BIN_TO_UUID(userUpdate)) as userUpdate,
+                            if(isnull(userCreate)=1,null,BIN_TO_UUID(userCreate)) as userCreate,
+                            if(isnull(userUpdate)=1,null,BIN_TO_UUID(userUpdate)) as userUpdate,
                             updateAt
-            FROM users where email = ?;`, [email.toString()])
-            const result: any = data[0][0]
-            return (result as IUserFind | undefined)
-        } catch (error) {
-            throw error
-        } finally {
-            connection.release();
-        }
-    }
-
-
-
-    async byEmailAndPassword(email: EmailAddres, password: string): Promise<IUserFind | undefined> {
-        const connection = await this.provider.getConnection();
-        try {
-            const data = await connection.query<RowDataPacket[][]>(`SELECT
-                            BIN_TO_UUID(idUSer) as idUSer,
-                            email,
-                            profile,
-                            password,
-                            created,
-                            if(isnull(userCreate)=1,"",BIN_TO_UUID(userCreate)) as userCreate,
-                            if(isnull(userUpdate)=1,"",BIN_TO_UUID(userUpdate)) as userUpdate,
-                            updateAt
-            FROM users where email = ? and password = ?;`, [email.toString(),password])
+            FROM users where email = ? and active = 1;`, [email.toString()])
             const result: any = data[0][0]
             return (result as IUserFind | undefined)
         } catch (error) {

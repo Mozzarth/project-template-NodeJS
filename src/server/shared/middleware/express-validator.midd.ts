@@ -5,7 +5,7 @@ export function validRouterExpressValidator(req: Request, res: Response, next: N
     try {
         const _error = validationResult(req);
         if (!_error.isEmpty()) {
-            return res.status(400).json({ message: "Bad request", errors: getMensajes(_error), error: "Faltan parametros o invalid parametros" })
+            return res.status(400).json({ message: "Bad request", errors: getMensajes(_error) })
         }
         next();
     } catch (error) {
