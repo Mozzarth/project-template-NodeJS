@@ -1,4 +1,4 @@
-import { startServer } from './backend/index'
+import { startServer } from './server/index'
 
 
 startServer()
