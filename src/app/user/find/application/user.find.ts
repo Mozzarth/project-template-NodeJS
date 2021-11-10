@@ -1,9 +1,10 @@
 import { ErrorPermissionDenied } from "../../../shared/errors/permission-denied.error";
 import { EmailAddres } from "../../../shared/domain/valueobjects/email/emailaddres";
-import { KeyAppService } from "../../../shared/guard/application/guard-app";
+import { KeyAppService, keyAppUseCase } from "../../../shared/guard/application/guard-app";
 import { Uuid } from "../../../shared/domain/valueobjects/uuid";
 import { IUserFindRepository } from "../domain/user.find";
 import { Profiles } from "../../shared/user.profiles";
+import { userFindMysql } from "../repository/user-find.mysql";
 
 
 
@@ -19,6 +20,7 @@ export class UserFindService {
             const currentUser = await this.getCurrentUser(key)
             const uuid = new Uuid(id)
             const user = await this.repository.byId(uuid)
+            return user
             if (user) {
                 let userPrimitives = user
                 // delete userPrimitives.password
@@ -44,7 +46,7 @@ export class UserFindService {
             throw error
         }
     }
-    async allUser(key : string){
+    async allUser(key: string) {
         try {
             const currentUser = await this.getCurrentUser(key)
             const user = await this.repository.all()
@@ -70,3 +72,6 @@ export class UserFindService {
     }
 
 }
+
+const userFindService = new UserFindService(keyAppUseCase, userFindMysql)
+export { userFindService }
